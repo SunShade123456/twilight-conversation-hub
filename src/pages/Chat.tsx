@@ -105,28 +105,23 @@ const Chat = () => {
     setLoading(true);
     const requestId = uuidv4();
 
-    // First, insert the human message into Supabase
-    const { error: insertError } = await supabase
-      .from('messages')
-      .insert({
-        session_id: sessionId,
-        message: {
-          type: 'human',
-          content: content
-        }
-      });
-
-    if (insertError) {
-      toast({
-        title: "Error",
-        description: "Failed to send message",
-        variant: "destructive",
-      });
-      setLoading(false);
-      return;
-    }
-
     try {
+      // First, insert the human message into Supabase
+      const { error: insertError } = await supabase
+        .from('messages')
+        .insert({
+          session_id: sessionId,
+          message: {
+            type: 'human',
+            content: content
+          }
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      // Then send the message to the AI agent
       const response = await fetch('https://b70a4ba1-5ec4-4f8e-b93c-2e78977f115a.lovableproject.com/api/pydantic-github-agent', {
         method: 'POST',
         headers: {
