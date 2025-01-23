@@ -10,7 +10,7 @@ import Chat from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+function App() {
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
@@ -51,6 +51,6 @@ const App = () => {
       </TooltipProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;
